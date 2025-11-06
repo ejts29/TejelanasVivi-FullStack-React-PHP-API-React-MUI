@@ -113,7 +113,7 @@ Formulario en desarrollo.
 
 ## Repositorio
 
-https://github.com/ejts29/tejelanas_vivi
+https://ejts29.github.io/TejelanasVivi-FullStack-React-PHP-API-React-MUI/
 
 ## Retrospectiva
 
