@@ -1,135 +1,107 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+-----
 
-Currently, two official plugins are available:
+# Tejelanas Vivi - Informe de Evaluación Final (Serverless Architecture)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Este documento es un informe consolidado que presenta el cumplimiento de los objetivos académicos de las asignaturas **Desarrollo Frontend / Backend (EVA3)** y documenta la arquitectura final de despliegue en la nube, la cual fue migrada para asegurar una operación **gratuita, estable y segura (HTTPS)**.
 
-## Expanding the ESLint configuration
+-----
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 1\. Evaluación Académica del Proyecto Original
 
-# Tejelanas Vivi - Landing Page Full Stack
+El proyecto original cumplía con la rúbrica de la EVA3 mediante la implementación de una API REST en PHP y su consumo en React.
 
-Landing page desarrollada para Tejelanas Vivi, una empresa dedicada a la venta de lanas y artículos de tejido. Esta aplicación incluye frontend (React + Vite + Material UI) y backend (PHP + MySQL + API REST documentada con Swagger y Postman).
+### 1.1 Cumplimiento de Criterios Técnicos y Backend
 
-## Equipo de Desarrollo
+| Criterio de Evaluación | Cumplimiento |
+| :--- | :--- |
+| **Documentación CRUD** | Se documentaron exhaustivamente las operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para las entidades **Productos, FAQ, Contacto** y **Quiénes Somos**. |
+| **Estructura OpenAPI 3.0** | Uso de la especificación **OpenAPI 3.0** para la documentación de la API (`swagger.yaml`). |
+| **Respuestas HTTP Detalladas** | Definición explícita de códigos de respuesta (`200`, `400`, `404`, `500`) para manejar errores y garantizar la interoperabilidad. |
+| **Validación de Datos PHP** | Se implementó validación en el lado del servidor antes del procesamiento de la base de datos (ej. verificación de campos requeridos). |
+| **Implementación Funcional** | El backend inicial fue implementado en **PHP** con la extensión `mysqli` para la conexión a MySQL. |
 
-- Efren Tovar Silva - RUT 25.698.445-8  
-- Eduardo Ahumada Catalan - RUT 17.304.258-2  
-- Repositorio GitHub: https://github.com/ejts29/tejelanas_vivi
+### 1.2 Habilidades Frontend (React)
 
-## Estructura del Proyecto
+  * **Framework y Librerías:** Utilización de **React** y **Material UI (MUI)** para construir una interfaz modular, responsiva y de alto rendimiento.
+  * **Componentización:** Creación de componentes reutilizables (`ProductCard`, `ContactForm`) que demuestran una estructura de proyecto escalable.
+  * **Consumo de API:** Lógica asíncrona en React (`useEffect`) para consumir datos de la API (originalmente PHP).
 
-tejelanas_vivi/
-├── backend/
-│   ├── api/
-│   │   ├── productos/
-│   │   ├── contacto/
-│   │   ├── FAQ.php
-│   │   └── QuienesSomos.php
-│   ├── config/
-│   ├── swagger.yaml
-│   └── swagger-ui-master/
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── ServiceCard.jsx
-│   │   │   ├── ProductsCarousel.jsx
-│   │   │   ├── FAQ.jsx
-│   │   │   ├── QuienesSomos.jsx
-│   │   │   └── Contacto.jsx
-│   │   ├── App.jsx
-│   │   └── main.jsx
-├── tejelanas.sql
-├── tejelanas_vivi.postman_collection.json
-└── README.md
+-----
 
-## Tecnologías Utilizadas
+## 2\. Adaptación a Arquitectura Cloud y Serverless
 
-- Frontend: React + Vite + Material UI
-- Backend: PHP + MySQL
-- API REST: Swagger (OpenAPI 3.0), Postman
-- Control de versiones: Git + GitHub
+Debido a la incompatibilidad del código PHP con el despliegue moderno y seguro (Netlify requiere HTTPS, el hosting gratuito de PHP es solo HTTP), el proyecto fue migrado a una arquitectura Serverless.
 
-## Instalación del Proyecto
+### 2.1 Resumen de la Arquitectura Final
 
-### Requisitos
-- Node.js y npm
-- XAMPP o servidor Apache/PHP
-- MySQL o MariaDB
+| Componente | Tecnología Original | Tecnología Final (Cloud / Segura) | Impacto |
+| :--- | :--- | :--- | :--- |
+| **Backend / API** | PHP Scripts / MySQL | **Supabase (PostgreSQL / API HTTPS)** | Se eliminó la necesidad del servidor PHP y se resolvió el error de seguridad (`401 Unauthorized`). |
+| **Conexión de Datos** | Duplicidad de credenciales | **Cliente Único Centralizado** | Se centralizó la instancia de Supabase en `supabaseClient.js`, resolviendo los errores de inicialización y las advertencias de código duplicado. |
+| **Archivos Estáticos** | Rutas codificadas fallidas | **Importación de Módulos (Vite)** | Se corrigió la sintaxis de importación de imágenes en todos los componentes para eliminar los errores `404 Not Found` en producción. |
 
-### Frontend
+##  Tecnologías Finales Utilizadas
 
-cd tejelanas_vivi/frontend  
-npm install  
-npm run dev
+El proyecto fue migrado a una arquitectura Serverless (sin servidor PHP) para garantizar un despliegue en línea rápido y seguro.
 
-### Backend
+| Componente | Tecnología | Notas |
+| :--- | :--- | :--- |
+| **Frontend** | React, Vite, Material UI (MUI) | Interfaz de usuario moderna y modular. |
+| **Backend / API** | Supabase (PostgreSQL) | Plataforma Serverless que proporciona la base de datos y la API RESTful. |
+| **Despliegue** | Netlify | Alojamiento global para la aplicación React (sitio estático). |
+| **Conexión** | `@supabase/supabase-js` | Conexión directa y segura (HTTPS) del cliente a la base de datos. |
 
-1. Copia la carpeta `tejelanas_vivi/backend` a `htdocs/` de XAMPP.
-2. Importa el archivo `tejelanas.sql` en phpMyAdmin.
-3. Ajusta las credenciales de la base de datos en `backend/config/db.php`.
-4. Accede a la API desde: http://localhost/tejelanas_vivi/backend/api/
+---
 
-## Componentes Clave
+# Ejecución y Despliegue (Versión Serverless)
 
-### ServiceCard.jsx
+Este proyecto está diseñado para funcionar como una **Aplicación Serverless** y se accede a él a través de la URL global de Netlify. El backend (API y Base de Datos) es proporcionado por Supabase.
 
-Componente reutilizable que recibe props:
+---
 
-<ServiceCard 
-  title="Lana Merino" 
-  description="100% lana merino"
-  image="/images/merino.jpg"
-  onContactClick={handleContactClick}
-/>
+## Ejecución en Línea (Versión Full Stack Serverless)
 
-### ProductsCarousel.jsx
+La aplicación ha sido configurada y desplegada para consumir datos de una API segura (HTTPS) sin necesidad de un servidor PHP.
 
-Carrusel de productos responsive.
+* **Despliegue Final:** La aplicación React está publicada profesionalmente mediante el servicio gratuito Netlify.
 
-### FAQ.jsx
+* **Ver el Resultado Final:**
+    Haga clic en el siguiente botón para acceder directamente al sitio web en línea (incluyendo las secciones dinámicas: Productos, FAQ, Quienes Somos):
 
-Renderiza preguntas frecuentes desde la API (FAQ.php) con colapsables.
+    [![Ver Sitio Web](https://img.shields.io/badge/Ver%20Sitio%20Web-00A38D?style=for-the-badge&logo=netlify&logoColor=white)](https://tejelanasvivi-fullstack-react-php-api.netlify.app/)
 
-### Contacto.jsx
+---
 
-Formulario en desarrollo.
+## Ejecución Local (Versión Desarrollo React)
 
-## Pruebas del Backend
+Para trabajar en el código y ver la aplicación conectada a la misma API de la nube (Supabase), siga estos pasos:
 
-- Colección de Postman: `tejelanas_vivi.postman_collection.json`
-- Swagger UI: `backend/swagger-ui-master/index.html`
-- Endpoints: Productos, FAQ, Contacto, Quienes Somos
+1.  **Requisitos:** Debe tener instalado **Node.js** y **npm** (o yarn).
+2.  **Instalar Dependencias:**
+    * Abra la terminal en la carpeta raíz del proyecto y ejecute: `npm install`
+3.  **Acceso Local:**
+    * Inicie el servidor de desarrollo de Vite: `npm run dev`
+    * Acceda a la aplicación en su navegador (normalmente en `http://localhost:5173`). Desde esta ubicación, el frontend se comunicará con la API de Supabase en la nube.
 
-## Control de Versiones con Git
 
-- Rama principal: main
-- Ramas de funcionalidad: feature/contact-form, feature/faq, etc.
-- Pull Requests y fusiones hacia main
+-----
 
-## Repositorio
+## 3\. Estructura Final del Repositorio
 
-https://ejts29.github.io/TejelanasVivi-FullStack-React-PHP-API-React-MUI/
+```
+.
+├── src/                      # Código Fuente React
+│   ├── assets/
+│   │   └── images/           # Imágenes importadas con nombres sin espacios.
+│   ├── components/           # Componentes React (Usa cliente centralizado)
+│   └── services/
+│       └── supabaseClient.js # INSTANCIA ÚNICA Y CENTRALIZADA DE SUPABASE
+├── package.json              # Incluye @supabase/supabase-js
+└── README.md                 # Este documento
+```
 
-## Retrospectiva
+-----
 
-- Análisis del trabajo realizado
-- Archivo: `Informe_Plan_Accion_Tejelanas.pdf`
-- Próximas mejoras: validaciones, seguridad, performance
-
-## Estado del Proyecto
-
-- [x] Carrusel de productos
-- [x] Componente reutilizable de tarjetas
-- [x] FAQ y Quienes Somos dinámicos
-- [x] API REST funcional
-- [x] Especificación Swagger completa
-- [x] Colección Postman
-- [x] Guía de buenas prácticas
-- [x] README.md documentado
-- [x] Git y GitHub con ramas
-- [x] Formulario de contacto completo con validaciones
+```eof
+```
