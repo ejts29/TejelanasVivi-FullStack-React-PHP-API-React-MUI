@@ -4,13 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Collapse, Paper, IconButton, CircularProgress, Container } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // Importa el cliente de Supabase
-import { createClient } from '@supabase/supabase-js'; 
+//import { createClient } from '@supabase/supabase-js'; 
 
 // *** 1. CREDENCIALES DE SUPABASE (Clave corregida y completa) ***
-const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
-// Usando la clave actualizada que tiene un tiempo de expiración más largo
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1NjI3NTAsImV4cCI6MjA3ODEzODc1MH0.6wuT3NtmeRBHxkZxCTwrrGzJPjWEw39WIg9qOhVtIHs'; 
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from '../services/supabaseClient';
 // **********************************
 
 

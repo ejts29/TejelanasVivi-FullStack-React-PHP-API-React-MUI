@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Container } from '@mui/material';
-import { createClient } from '@supabase/supabase-js'; 
+//import { createClient } from '@supabase/supabase-js'; 
 
 // IMPORTACIÓN CORREGIDA DE LA IMAGEN INSTITUCIONAL
 // Usamos require() o import para que Vite/Netlify la procesen
@@ -10,9 +10,8 @@ import QuienesSomosImage from '../assets/images/Captura-de-pantalla-2025-05-29-1
 
 
 // *** 1. CREDENCIALES DE SUPABASE (Clave actualizada) ***
-const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1NjI3NTAsImV4cCI6MjA3ODEzODc1MH0.6wuT3NtmeRBHxkZxCTwrrGzJPjWEw39WIg9qOhVtIHs'; 
-const supabase = createClient(supabaseUrl, supabaseKey);
+// BORRA ESTAS LÍNEAS COMPLETAS EN LOS 4 ARCHIVOS
+import { supabase } from '../services/supabaseClient';
 // ******************************************************
 
 

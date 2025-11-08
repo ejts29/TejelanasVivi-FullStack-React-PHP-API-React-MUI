@@ -7,7 +7,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
 import ServiceCard from './ServiceCard';
 // Importa el cliente de Supabase
-import { createClient } from '@supabase/supabase-js'; 
+//import { createClient } from '@supabase/supabase-js'; 
 
 // --- IMPORTACIONES DE IMÁGENES ---
 // Importamos las imágenes estáticas para que Vite/Netlify las procesen
@@ -27,9 +27,8 @@ const productImages = {
 };
 
 // *** 1. CREDENCIALES DE SUPABASE (Corregidas y completas) ***
-const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1NjI3NTAsImV4cCI6MjA3ODEzODc1MH0.6wuT3NtmeRBHxkZxCTwrrGzJPjWEw39WIg9qOhVtIHs'; 
-const supabase = createClient(supabaseUrl, supabaseKey);
+// BORRA ESTAS LÍNEAS COMPLETAS EN LOS 4 ARCHIVOS
+import { supabase } from '../services/supabaseClient';
 // **********************************
 
 const Productos = () => {
