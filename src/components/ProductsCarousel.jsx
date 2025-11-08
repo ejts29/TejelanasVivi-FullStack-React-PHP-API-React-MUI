@@ -4,12 +4,13 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ProductCard from './ProductCard';
 
+// CORRECCIÓN: Rutas de imágenes actualizadas para usar guiones (como en tus archivos)
 const productsData = [
-  { title: 'Lana Merino Premium', description: '100% lana merino...', price: '$12.500', image: 'src/assets/images/Lana Merino Premium.jpg' },
-  { title: 'Set de Agujas de Bambú', description: 'Juego completo...', price: '$18.900', image: 'src/assets/images/Set de Agujas de Bambú.jpg' },
-  { title: 'Hilo de Algodón Orgánico', description: 'Algodón 100%...', price: '$8.900', image: 'src/assets/images/Hilo de Algodon Organico.jpg' },
-  { title: 'Kit de Accesorios', description: 'Todo lo que necesitas...', price: '$15.500', image: 'src/assets/images/Kit de Accesorios.jpg' },
-  { title: 'Lana de Alpaca', description: 'Lana de alpaca...', price: '$14.900', image: 'src/assets/images/Lana de Alpaca.jpg' },
+  { title: 'Lana Merino Premium', description: '100% lana merino...', price: '$12.500', image: 'src/assets/images/Lana-Merino-Premium.jpg' },
+  { title: 'Set de Agujas de Bambú', description: 'Juego completo...', price: '$18.900', image: 'src/assets/images/Set-de-Agujas-de-Bambú.jpg' },
+  { title: 'Hilo de Algodón Orgánico', description: 'Algodón 100%...', price: '$8.900', image: 'src/assets/images/Hilo-de-Algodon-Organico.jpg' },
+  { title: 'Kit de Accesorios', description: 'Todo lo que necesitas...', price: '$15.500', image: 'src/assets/images/Kit-de-Accesorios.jpg' },
+  { title: 'Lana de Alpaca', description: 'Lana de alpaca...', price: '$14.900', image: 'src/assets/images/Lana-de-Alpaca.jpg' },
 ];
 
 const ProductsCarousel = ({ onContactProduct }) => {

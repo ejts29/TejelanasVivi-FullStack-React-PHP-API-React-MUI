@@ -1,14 +1,13 @@
 import React from 'react';
 import { Box, Typography, Grid, Card, CardMedia, CardContent, Button, Chip } from '@mui/material';
 
-
-
 // Ejemplo de imágenes (ajústalas según tus archivos reales)
-import TejidoPrincipiantes from '../assets/images/Tejido para Principiantes.png';
-import TejidoPrendas from '../assets/images/tejido de prendas.png';
-import TecnicasAvanzadas from '../assets/images/tecnicas avanzadas.png';
-import TejidoHogar from '../assets/images/tejido para el hogar.jpg';
-import CertificacionPintura from '../assets/images/certificacion en pintura y estampado.png';
+// CORRECCIÓN: Nombres de archivo actualizados para coincidir con los archivos reales (con guiones).
+import TejidoPrincipiantes from '../assets/images/Tejido-para-Principiantes1.png';
+import TejidoPrendas from '../assets/images/Tejido-de-Prendas1.png';
+import TecnicasAvanzadas from '../assets/images/Tecnicas-Avanzadas1.png';
+import TejidoHogar from '../assets/images/tejido-para-el-hogar.jpg';
+import CertificacionPintura from '../assets/images/certificacion-en-pintura-y-estampado.png';
 
 // Array con los datos de los talleres
 const workshops = [

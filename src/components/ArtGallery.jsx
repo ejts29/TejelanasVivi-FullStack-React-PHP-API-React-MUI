@@ -5,11 +5,11 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const images = [
-    'src/assets/images/Captura de pantalla 2025-05-27 233309.png',
+    'src/assets/images/Captura-de-pantalla-2025-05-27233309.png',
     'src/assets/images/IMG-20250528-WA0014.jpg',
-    'src/assets/images/Captura de pantalla 2025-05-27 233002.png',
-    'src/assets/images/Captura de pantalla 2025-05-27 233158.png',
-    'src/assets/images/Captura de pantalla 2025-05-27 233403.png',
+    'src/assets/images/Captura-de-pantalla-2025-05-27233002.png',
+    'src/assets/images/Captura-de-pantalla-2025-05-27233158.png',
+    'src/assets/images/Captura-de-pantalla-2025-05-27233403.png',
     'src/assets/images/IMG-20250528-WA0004.jpg',
     'src/assets/images/IMG-20250528-WA0005.jpg',
     'src/assets/images/IMG-20250528-WA0006.jpg',

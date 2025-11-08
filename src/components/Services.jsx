@@ -3,21 +3,22 @@ import React from 'react';
 import { Box, Typography, Grid } from '@mui/material';
 import ServiceCard from './ServiceCard';
 
+// CORRECCIÓN: Rutas de imágenes actualizadas para usar guiones (como en tus archivos)
 const servicesData = [
     {
         title: 'Insumos para Tejido',
         description: 'Encuentra la mejor selección de lanas, hilos, agujas y accesorios para tus proyectos de tejido. Trabajamos con materiales de primera calidad.',
-        image: 'src/assets/images/Insumos para Tejido.jpg',
+        image: 'src/assets/images/Insumos-para-Tejido.jpg',
     },
     {
         title: 'Talleres Presenciales',
         description: 'Aprende a tejer con nuestros talleres presenciales en Laguna de Zapallar. Grupos reducidos y atención personalizada para todos los niveles.',
-        image: 'src/assets/images/Talleres Presenciales.jpg',
+        image: 'src/assets/images/Talleres-Presenciales.jpg', // Corregido de TalleresPresenciales1.jpg y espacios
     },
     {
         title: 'Productos Personalizados',
         description: 'Creamos piezas tejidas a mano según tus especificaciones. Desde prendas de vestir hasta accesorios para el hogar, todo hecho con amor.',
-        image: 'src/assets/images/Productos Personalizados.jpg',
+        image: 'src/assets/images/Productos-Personalizados.jpg',
     },
 ];
 
