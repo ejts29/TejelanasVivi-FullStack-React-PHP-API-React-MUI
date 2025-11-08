@@ -6,8 +6,11 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
 import ServiceCard from './ServiceCard';
-// Importa el cliente de Supabase
-//import { createClient } from '@supabase/supabase-js'; 
+
+// CORRECCIÓN CLAVE: 
+// 1. ELIMINAMOS EL BLOQUE DUPLICADO DE CREDENCIALES (supabaseUrl, supabaseKey, createClient)
+// 2. IMPORTAMOS EL CLIENTE CENTRALIZADO DESDE src/services/supabaseClient.js
+import { supabase } from '../services/supabaseClient'; 
 
 // --- IMPORTACIONES DE IMÁGENES ---
 // Importamos las imágenes estáticas para que Vite/Netlify las procesen
@@ -26,10 +29,6 @@ const productImages = {
     'Lana de Alpaca': imgAlpaca,
 };
 
-// *** 1. CREDENCIALES DE SUPABASE (Corregidas y completas) ***
-// BORRA ESTAS LÍNEAS COMPLETAS EN LOS 4 ARCHIVOS
-import { supabase } from '../services/supabaseClient';
-// **********************************
 
 const Productos = () => {
     const [productos, setProductos] = useState([]);
@@ -48,7 +47,7 @@ const Productos = () => {
     useEffect(() => {
         async function getProductos() {
             try {
-                // CONSULTA SUPABASE
+                // CONSULTA SUPABASE (Usando el cliente importado)
                 const { data, error } = await supabase
                     .from('productos')
                     .select('*'); 

@@ -2,16 +2,18 @@
 
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Container } from '@mui/material';
-//import { createClient } from '@supabase/supabase-js'; 
+
+// CORRECCIÓN CLAVE: 
+// 1. ELIMINAMOS EL BLOQUE DUPLICADO DE CREDENCIALES (supabaseUrl, supabaseKey, createClient)
+// 2. IMPORTAMOS EL CLIENTE CENTRALIZADO DESDE src/services/supabaseClient.js
+import { supabase } from '../services/supabaseClient';
 
 // IMPORTACIÓN CORREGIDA DE LA IMAGEN INSTITUCIONAL
-// Usamos require() o import para que Vite/Netlify la procesen
+// Usamos import para que Vite/Netlify la procesen correctamente
 import QuienesSomosImage from '../assets/images/Captura-de-pantalla-2025-05-29-171243.png';
 
-
-// *** 1. CREDENCIALES DE SUPABASE (Clave actualizada) ***
-// BORRA ESTAS LÍNEAS COMPLETAS EN LOS 4 ARCHIVOS
-import { supabase } from '../services/supabaseClient';
+// ******************************************************
+// NOTA: EL BLOQUE DE CREDENCIALES HA SIDO ELIMINADO
 // ******************************************************
 
 
@@ -22,7 +24,7 @@ const QuienesSomos = () => {
     useEffect(() => {
         async function getQuienesSomos() {
             try {
-                // *** CONSULTA SUPABASE ***
+                // *** CONSULTA SUPABASE (Usando el cliente importado) ***
                 const { data, error } = await supabase
                     .from('quienessomos') 
                     .select('*') 
@@ -61,9 +63,8 @@ const QuienesSomos = () => {
     }
 
     // Si terminó de cargar y no hay datos válidos (incluyendo errores), no renderiza nada
-    // Si la API key es inválida, este componente NO se renderizará.
     if (!info) return null;
-
+    
     return (
         <Container id="quienes-somos" sx={{ py: 8 }}>
             {/* Título principal */}

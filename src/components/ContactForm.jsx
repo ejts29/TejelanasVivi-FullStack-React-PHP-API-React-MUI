@@ -14,17 +14,18 @@ import {
     FormControl,
     Paper,
     Snackbar,
-    Alert
+    Alert 
 } from '@mui/material';
 import ReCAPTCHA from 'react-google-recaptcha';
-// IMPORTE DE SUPABASE
-import { createClient } from '@supabase/supabase-js'; 
 
-// *** 1. CREDENCIALES DE SUPABASE (Corregidas y codificadas) ***
-const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1NjI3NTAsImV4cCI6MjA3ODEzODc1MH0.6wuT3NtmeRBHxkZxCTwrrGzJPjWEw39WIg9qOhVtIHs'; 
-const supabase = createClient(supabaseUrl, supabaseKey);
-// *************************************************************
+// CORRECCIÓN CLAVE: 
+// Eliminamos el bloque duplicado de credenciales.
+// Importamos el cliente 'supabase' desde el archivo centralizado.
+import { supabase } from '../services/supabaseClient'; 
+
+// **********************************
+// NOTA: EL BLOQUE DE CREDENCIALES HA SIDO ELIMINADO
+// **********************************
 
 const isValidEmail = (email) => {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
@@ -133,17 +134,16 @@ const ContactForm = ({ selectedProduct, selectedService }) => {
             const newContact = {
                 nombre: formData.nombre,
                 email: formData.email,
-                telefono: formData.telefono || null, // Permite nulo si está vacío
+                telefono: formData.telefono || null,
                 asunto: formData.asunto,
                 categoria: formData.categoria,
                 mensaje: formData.mensaje,
                 metodo_envio: formData.metodoEnvio,
                 metodo_pago: formData.metodoPago,
-                // El campo 'fecha' lo maneja automáticamente Supabase
             };
 
             try {
-                // *** 2. LÓGICA DE ENVÍO A SUPABASE ***
+                // *** LÓGICA DE ENVÍO A SUPABASE ***
                 const { error } = await supabase
                     .from('contacto')
                     .insert([newContact]); 
@@ -170,7 +170,7 @@ const ContactForm = ({ selectedProduct, selectedService }) => {
                 console.error("Error de Supabase:", err);
                 let errorMessage = 'Error al enviar el mensaje.';
                 // Si el error es de RLS (error de seguridad de base de datos)
-                if (err.code === '42501' || err.message.includes('RLS')) {
+                if (err.code === '42501' || (err.message && err.message.includes('RLS'))) {
                     errorMessage = 'Error de seguridad (RLS): Necesitas configurar una política de INSERT para la tabla "contacto" en Supabase.';
                 }
                 

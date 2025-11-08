@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Collapse, Paper, IconButton, CircularProgress, Container } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// Importa el cliente de Supabase
-//import { createClient } from '@supabase/supabase-js'; 
 
-// *** 1. CREDENCIALES DE SUPABASE (Clave corregida y completa) ***
-import { supabase } from '../services/supabaseClient';
+// CORRECCIÓN CLAVE: 
+// Eliminamos la definición duplicada (supabaseUrl, supabaseKey, createClient)
+// e IMPORTAMOS el cliente centralizado.
+import { supabase } from '../services/supabaseClient'; 
 // **********************************
 
 
@@ -19,18 +19,19 @@ const FAQ = () => {
     useEffect(() => {
         async function getFAQ() {
             try {
-                // *** CONSULTA SUPABASE ***
+                // *** CONSULTA SUPABASE (Usando el cliente importado) ***
                 const { data, error } = await supabase
                     .from('faq') // Nombre de la tabla
                     .select('*'); // Selecciona todas las filas y columnas
 
                 if (error) {
+                    // Si la clave API es inválida, se arrojará un error aquí
                     throw error;
                 }
 
                 setFaqs(data);
             } catch (err) {
-                // Manejo de errores (incluido el error 401 si la clave es mala)
+                // Manejo de errores
                 console.error("Error al cargar FAQ desde Supabase:", err.message);
                 setFaqs([]); // Dejar la lista vacía si falla
             } finally {
