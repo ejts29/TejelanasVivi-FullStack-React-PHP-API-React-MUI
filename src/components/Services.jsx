@@ -3,24 +3,30 @@ import React from 'react';
 import { Box, Typography, Grid } from '@mui/material';
 import ServiceCard from './ServiceCard';
 
-// CORRECCIÓN: Rutas de imágenes actualizadas para usar guiones (como en tus archivos)
+// --- IMPORTACIONES CORREGIDAS ---
+import imgInsumos from '../assets/images/Insumos-para-Tejido.jpg';
+import imgTalleres from '../assets/images/Talleres-Presenciales.jpg';
+import imgPersonalizados from '../assets/images/Productos-Personalizados.jpg';
+
+// --- ARRAY CORREGIDO ---
 const servicesData = [
     {
         title: 'Insumos para Tejido',
         description: 'Encuentra la mejor selección de lanas, hilos, agujas y accesorios para tus proyectos de tejido. Trabajamos con materiales de primera calidad.',
-        image: 'src/assets/images/Insumos-para-Tejido.jpg',
+        image: imgInsumos,
     },
     {
         title: 'Talleres Presenciales',
         description: 'Aprende a tejer con nuestros talleres presenciales en Laguna de Zapallar. Grupos reducidos y atención personalizada para todos los niveles.',
-        image: 'src/assets/images/Talleres-Presenciales.jpg', // Corregido de TalleresPresenciales1.jpg y espacios
+        image: imgTalleres,
     },
     {
         title: 'Productos Personalizados',
         description: 'Creamos piezas tejidas a mano según tus especificaciones. Desde prendas de vestir hasta accesorios para el hogar, todo hecho con amor.',
-        image: 'src/assets/images/Productos-Personalizados.jpg',
+        image: imgPersonalizados,
     },
 ];
+// --- FIN DE LA CORRECCIÓN ---
 
 const Services = ({ onContactService }) => ( // Renombrado onContact a onContactService
     <Box id="servicios" sx={{ py: 8, px: 2, bgcolor: 'background.paper' }}>

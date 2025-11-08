@@ -4,14 +4,24 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ProductCard from './ProductCard';
 
-// CORRECCIÓN: Rutas de imágenes actualizadas para usar guiones (como en tus archivos)
+// --- IMPORTACIONES CORREGIDAS ---
+// Importamos las imágenes para que Vite las procese
+import imgMerino from '../assets/images/Lana-Merino-Premium.jpg';
+import imgAgujas from '../assets/images/Set-de-Agujas-de-Bambú.jpg';
+import imgAlgodon from '../assets/images/Hilo-de-Algodon-Organico.jpg';
+import imgKit from '../assets/images/Kit-de-Accesorios.jpg';
+import imgAlpaca from '../assets/images/Lana-de-Alpaca.jpg';
+
+// --- ARRAY CORREGIDO ---
+// Usamos las variables de importación, no strings de texto
 const productsData = [
-  { title: 'Lana Merino Premium', description: '100% lana merino...', price: '$12.500', image: 'src/assets/images/Lana-Merino-Premium.jpg' },
-  { title: 'Set de Agujas de Bambú', description: 'Juego completo...', price: '$18.900', image: 'src/assets/images/Set-de-Agujas-de-Bambú.jpg' },
-  { title: 'Hilo de Algodón Orgánico', description: 'Algodón 100%...', price: '$8.900', image: 'src/assets/images/Hilo-de-Algodon-Organico.jpg' },
-  { title: 'Kit de Accesorios', description: 'Todo lo que necesitas...', price: '$15.500', image: 'src/assets/images/Kit-de-Accesorios.jpg' },
-  { title: 'Lana de Alpaca', description: 'Lana de alpaca...', price: '$14.900', image: 'src/assets/images/Lana-de-Alpaca.jpg' },
+  { title: 'Lana Merino Premium', description: '100% lana merino...', price: '$12.500', image: imgMerino },
+  { title: 'Set de Agujas de Bambú', description: 'Juego completo...', price: '$18.900', image: imgAgujas },
+  { title: 'Hilo de Algodón Orgánico', description: 'Algodón 100%...', price: '$8.900', image: imgAlgodon },
+  { title: 'Kit de Accesorios', description: 'Todo lo que necesitas...', price: '$15.500', image: imgKit },
+  { title: 'Lana de Alpaca', description: 'Lana de alpaca...', price: '$14.900', image: imgAlpaca },
 ];
+// --- FIN DE LA CORRECCIÓN ---
 
 const ProductsCarousel = ({ onContactProduct }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
