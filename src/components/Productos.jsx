@@ -20,7 +20,7 @@ const Productos = () => {
     };
     // Efecto para obtener productos desde la API
     useEffect(() => {
-        fetch('http://localhost/tejelanas_vivi/backend/api/productos/productos.php')
+        fetch('http://tejelanasvivi-ejts.infinityfree.me/backend/api/productos/productos.php')
             .then((response) => {
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 return response.json();

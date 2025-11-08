@@ -119,7 +119,7 @@ const ContactForm = ({ selectedProduct, selectedService }) => {
 
         if (Object.keys(validationErrors).length === 0) {
             try {
-                const response = await fetch('http://localhost/tejelanas_vivi/backend/api/productos/contacto.php', {
+                const response = await fetch('http://tejelanasvivi-ejts.infinityfree.me/backend/api/productos/contacto.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ ...formData, captchaToken })

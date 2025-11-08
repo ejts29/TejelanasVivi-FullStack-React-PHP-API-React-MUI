@@ -9,7 +9,7 @@ const FAQ = () => {
     const [openIndex, setOpenIndex] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost/tejelanas_vivi/backend/api/productos/FAQ.php')
+        fetch('http://tejelanasvivi-ejts.infinityfree.me/backend/api/productos/FAQ.php')
             .then(res => res.json())
             .then(data => setFaqs(data))
             .catch(err => console.error('Error al cargar FAQ:', err));

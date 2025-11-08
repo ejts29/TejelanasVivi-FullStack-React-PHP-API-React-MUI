@@ -8,7 +8,7 @@ const QuienesSomos = () => {
 
     useEffect(() => {
         // Aquí llamamos a la API de QuienesSomos
-        fetch('http://localhost/tejelanas_vivi/backend/api/productos/QuienesSomos.php')
+        fetch('http://tejelanasvivi-ejts.infinityfree.me/backend/api/productos/QuienesSomos.php')
             .then(res => res.json())
             .then(data => setInfo(data))
             .catch(err => console.error('Error al cargar sección "Quiénes Somos":', err));
