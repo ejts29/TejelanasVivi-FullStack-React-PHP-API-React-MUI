@@ -13,138 +13,141 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 // **********************************
 
-// --- IMPORTACIONES DE IMÁGENES (Mantener la lógica para que Vite las procese) ---
-// *Nota: Para usar estas importaciones en el carrusel de productos destacados, 
-// debemos cargar los productos estáticamente o mapear el nombre de la imagen.*
+// --- IMPORTACIONES DE IMÁGENES CORREGIDAS (Sintaxis compatible con Vite/Netlify) ---
+import imgMerino from '../assets/images/Lana-Merino-Premium.jpg';
+import imgAgujas from '../assets/images/Set-de-Agujas-de-Bambú.jpg';
+import imgAlgodon from '../assets/images/Hilo-de-Algodon-Organico.jpg';
+import imgKit from '../assets/images/Kit-de-Accesorios.jpg';
+import imgAlpaca from '../assets/images/Lana-de-Alpaca.jpg';
 
-// Definimos el array de productos vacío para que se llene con Supabase.
-// Usaremos la URL de las imágenes estáticas importadas.
+// Definimos el mapeo de nombres de producto a las variables importadas
 const productImages = {
-    'Lana Merino Premium': require('../assets/images/Lana-Merino-Premium.jpg'),
-    'Set de Agujas de Bambú': require('../assets/images/Set-de-Agujas-de-Bambú.jpg'),
-    'Hilo de Algodón Orgánico': require('../assets/images/Hilo-de-Algodon-Organico.jpg'),
-    'Kit de Accesorios': require('../assets/images/Kit-de-Accesorios.jpg'),
-    'Lana de Alpaca': require('../assets/images/Lana-de-Alpaca.jpg'),
+    'Lana Merino Premium': imgMerino,
+    'Set de Agujas de Bambú': imgAgujas,
+    'Hilo de Algodón Orgánico': imgAlgodon,
+    'Kit de Accesorios': imgKit,
+    'Lana de Alpaca': imgAlpaca,
 };
 
 const ProductsCarousel = ({ onContactProduct }) => {
-  // Cambiamos productsData estático por estado dinámico
-  const [productsData, setProductsData] = useState([]); 
-  const [loading, setLoading] = useState(true);
-  
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsPerView, setItemsPerView] = useState(1);
+    // Cambiamos productsData estático por estado dinámico
+    const [productsData, setProductsData] = useState([]); 
+    const [loading, setLoading] = useState(true);
+    
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [itemsPerView, setItemsPerView] = useState(1);
 
-  // EFECTO 1: Obtener productos desde Supabase
-  useEffect(() => {
-    async function getProductosDestacados() {
-        try {
-            // Consulta la tabla 'productos' (Limitamos a 5 o la cantidad que quieras destacar)
-            const { data, error } = await supabase
-                .from('productos')
-                .select('*')
-                .limit(5); // Limita el carrusel
+    // EFECTO 1: Obtener productos desde Supabase
+    useEffect(() => {
+        async function getProductosDestacados() {
+            try {
+                // Consulta la tabla 'productos' (Limitamos a 5 o la cantidad que quieras destacar)
+                const { data, error } = await supabase
+                    .from('productos')
+                    .select('*')
+                    .limit(5); 
 
-            if (error) {
-                throw error;
+                if (error) {
+                    throw error;
+                }
+
+                // Mapea la URL estática de la imagen para que React la pueda usar
+                const mappedData = data.map(product => ({
+                    ...product,
+                    // Asignamos la imagen importada usando el diccionario 'productImages'
+                    image: productImages[product.nombre] || product.imagenUrl 
+                }));
+
+                setProductsData(mappedData);
+            } catch (error) {
+                console.error('Error al obtener productos destacados:', error.message);
+                setProductsData([]);
+            } finally {
+                setLoading(false);
             }
-
-            // Mapea la URL estática de la imagen para que React la pueda usar
-            const mappedData = data.map(product => ({
-                ...product,
-                // Asignamos la imagen importada por su nombre (si existe)
-                image: productImages[product.nombre] || product.imagenUrl 
-            }));
-
-            setProductsData(mappedData);
-        } catch (error) {
-            console.error('Error al obtener productos destacados:', error.message);
-            setProductsData([]);
-        } finally {
-            setLoading(false);
         }
+        getProductosDestacados();
+    }, []);
+
+    // EFECTO 2: Ajustar la vista del carrusel (el código que ya tenías)
+    useEffect(() => {
+        const updateItemsPerView = () => {
+            const width = window.innerWidth;
+            if (width >= 1024) setItemsPerView(3);
+            else if (width >= 768) setItemsPerView(2);
+            else setItemsPerView(1);
+        };
+        updateItemsPerView();
+        window.addEventListener('resize', updateItemsPerView);
+        return () => window.removeEventListener('resize', updateItemsPerView);
+    }, []);
+
+    if (loading) {
+        return (
+            <Container sx={{ py: 5 }}>
+                <Typography variant="h6" align="center">Cargando destacados...</Typography>
+            </Container>
+        );
     }
-    getProductosDestacados();
-  }, []);
 
-  // EFECTO 2: Ajustar la vista del carrusel (el código que ya tenías)
-  useEffect(() => {
-    const updateItemsPerView = () => {
-      const width = window.innerWidth;
-      if (width >= 1024) setItemsPerView(3);
-      else if (width >= 768) setItemsPerView(2);
-      else setItemsPerView(1);
+    // Si no hay datos, no renderiza el carrusel
+    if (productsData.length === 0) return null; 
+
+    const totalSlides = Math.ceil(productsData.length / itemsPerView);
+    const goToSlide = (index) => {
+        if (index < 0) index = totalSlides - 1;
+        else if (index >= totalSlides) index = 0;
+        setCurrentIndex(index);
     };
-    updateItemsPerView();
-    window.addEventListener('resize', updateItemsPerView);
-    return () => window.removeEventListener('resize', updateItemsPerView);
-  }, []);
 
-  if (loading) {
+    const startIndex = currentIndex * itemsPerView;
+    const visibleItems = productsData.slice(startIndex, startIndex + itemsPerView);
+
     return (
-        <Container sx={{ py: 5 }}>
-            <Typography variant="h6" align="center">Cargando destacados...</Typography>
-        </Container>
+        <Box
+            id="productos"
+            role="region"
+            aria-label="Carrusel de productos destacados"
+            sx={{ py: 8, px: 2, bgcolor: 'secondary.main', maxWidth: 1200, mx: 'auto' }}
+        >
+            <Typography variant="h4" align="center" gutterBottom color="primary" fontWeight="bold" mb={4}>
+                Productos Destacados
+            </Typography>
+            <Typography variant="subtitle1" align="center" color="text.secondary" maxWidth={700} mx="auto" mb={6}>
+                Descubre nuestra selección de insumos para tejido...
+            </Typography>
+            <Box position="relative">
+                <IconButton
+                    aria-label="Producto anterior"
+                    onClick={() => goToSlide(currentIndex - 1)}
+                    sx={{ position: 'absolute', top: '50%', left: 0, transform: 'translateY(-50%)', zIndex: 1 }}
+                >
+                    <ArrowBackIosNewIcon color="primary" />
+                </IconButton>
+                <Grid container spacing={2} justifyContent="center" role="list" aria-live="polite">
+                    {visibleItems.map((product, i) => (
+                        <Grid item xs={12} sm={6} md={4} key={product.nombre || i} role="listitem">
+                            <ProductCard 
+                                title={product.nombre || product.title} 
+                                description={product.descripcion || product.description}
+                                // Aseguramos que el precio se muestre con formato
+                                price={`$${(product.precio || 0).toLocaleString('es-CL', { minimumFractionDigits: 2 })}`} 
+                                image={product.image}
+                                onContactProduct={onContactProduct} 
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+                <IconButton
+                    aria-label="Producto siguiente"
+                    onClick={() => goToSlide(currentIndex + 1)}
+                    sx={{ position: 'absolute', top: '50%', right: 0, transform: 'translateY(-50%)', zIndex: 1 }}
+                >
+                    <ArrowForwardIosIcon color="primary" />
+                </IconButton>
+            </Box>
+        </Box>
     );
-  }
-
-  // Si no hay datos, no renderiza el carrusel
-  if (productsData.length === 0) return null; 
-
-  const totalSlides = Math.ceil(productsData.length / itemsPerView);
-  const goToSlide = (index) => {
-    if (index < 0) index = totalSlides - 1;
-    else if (index >= totalSlides) index = 0;
-    setCurrentIndex(index);
-  };
-
-  const startIndex = currentIndex * itemsPerView;
-  const visibleItems = productsData.slice(startIndex, startIndex + itemsPerView);
-
-  return (
-    <Box
-      id="productos"
-      role="region"
-      aria-label="Carrusel de productos destacados"
-      sx={{ py: 8, px: 2, bgcolor: 'secondary.main', maxWidth: 1200, mx: 'auto' }}
-    >
-      <Typography variant="h4" align="center" gutterBottom color="primary" fontWeight="bold" mb={4}>
-        Productos Destacados
-      </Typography>
-      <Typography variant="subtitle1" align="center" color="text.secondary" maxWidth={700} mx="auto" mb={6}>
-        Descubre nuestra selección de insumos para tejido...
-      </Typography>
-      <Box position="relative">
-        <IconButton
-          aria-label="Producto anterior"
-          onClick={() => goToSlide(currentIndex - 1)}
-          sx={{ position: 'absolute', top: '50%', left: 0, transform: 'translateY(-50%)', zIndex: 1 }}
-        >
-          <ArrowBackIosNewIcon color="primary" />
-        </IconButton>
-        <Grid container spacing={2} justifyContent="center" role="list" aria-live="polite">
-          {visibleItems.map((product, i) => (
-            <Grid item xs={12} sm={6} md={4} key={product.title} role="listitem">
-              <ProductCard 
-                title={product.nombre || product.title} 
-                description={product.descripcion || product.description}
-                price={`$${(product.precio || product.price).toLocaleString('es-CL')}`}
-                image={product.image}
-                onContactProduct={onContactProduct} 
-              />
-            </Grid>
-          ))}
-        </Grid>
-        <IconButton
-          aria-label="Producto siguiente"
-          onClick={() => goToSlide(currentIndex + 1)}
-          sx={{ position: 'absolute', top: '50%', right: 0, transform: 'translateY(-50%)', zIndex: 1 }}
-        >
-          <ArrowForwardIosIcon color="primary" />
-        </IconButton>
-      </Box>
-    </Box>
-  );
 };
 
 export default ProductsCarousel;
