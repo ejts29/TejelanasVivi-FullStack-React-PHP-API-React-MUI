@@ -77,13 +77,18 @@ La aplicación ha sido configurada y desplegada para consumir datos de una API s
 
 Para trabajar en el código y ver la aplicación conectada a la misma API de la nube (Supabase), siga estos pasos:
 
-1.  **Requisitos:** Debe tener instalado **Node.js** y **npm** (o yarn).
-2.  **Instalar Dependencias:**
-    * Abra la terminal en la carpeta raíz del proyecto y ejecute: `npm install`
-3.  **Acceso Local:**
-    * Inicie el servidor de desarrollo de Vite: `npm run dev`
-    * Acceda a la aplicación en su navegador (normalmente en `http://localhost:5173`). Desde esta ubicación, el frontend se comunicará con la API de Supabase en la nube.
+1.  **Requisitos:** Debe tener instalado Node.js y npm (o yarn).
 
+2.  **Base de Datos (Conexión Remota):**
+    * En este modelo Serverless, **no se requiere** instalar ni configurar un servidor de base de datos local (MySQL/XAMPP).
+    * La aplicación React se conecta directamente al servicio **PostgreSQL de Supabase** en la nube a través de su **API REST HTTPS** (configurada en `src/services/supabaseClient.js`).
+
+3.  **Instalar Dependencias:**
+    * Abra la terminal en la carpeta raíz del proyecto y ejecute: `npm install`
+
+4.  **Acceso Local:**
+    * Inicie el servidor de desarrollo de Vite: `npm run dev`
+    * Acceda a la aplicación en su navegador (normalmente en `http://localhost:5173`). Desde esta ubicación, el frontend se comunicará con la API de Supabase en la nube para obtener y enviar datos.
 
 -----
 
