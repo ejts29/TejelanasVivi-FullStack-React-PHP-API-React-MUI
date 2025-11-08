@@ -1,20 +1,14 @@
 // src/components/QuienesSomos.jsx
 
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Container } from '@mui/material';
+import { Box, Typography, Container, CircularProgress } from '@mui/material';
 
-// CORRECCIÓN CLAVE: 
-// 1. ELIMINAMOS EL BLOQUE DUPLICADO DE CREDENCIALES (supabaseUrl, supabaseKey, createClient)
-// 2. IMPORTAMOS EL CLIENTE CENTRALIZADO DESDE src/services/supabaseClient.js
-import { supabase } from '../services/supabaseClient';
+// 1. IMPORTAMOS EL CLIENTE CENTRALIZADO
+import { supabase } from '../services/supabaseClient'; 
 
 // IMPORTACIÓN CORREGIDA DE LA IMAGEN INSTITUCIONAL
-// Usamos import para que Vite/Netlify la procesen correctamente
+// Usamos import para que Vite/Netlify la procesen
 import QuienesSomosImage from '../assets/images/Captura-de-pantalla-2025-05-29-171243.png';
-
-// ******************************************************
-// NOTA: EL BLOQUE DE CREDENCIALES HA SIDO ELIMINADO
-// ******************************************************
 
 
 const QuienesSomos = () => {
@@ -38,7 +32,8 @@ const QuienesSomos = () => {
                 // Agregamos la ruta estática de la imagen procesada por Vite
                 const processedInfo = {
                     ...data,
-                    imagenUrl: QuienesSomosImage // Usamos la variable importada
+                    // CORRECCIÓN DE IMAGEN: Usamos la variable importada
+                    imagenUrl: QuienesSomosImage 
                 };
 
                 setInfo(processedInfo);
@@ -56,13 +51,14 @@ const QuienesSomos = () => {
     // Si aún está cargando, muestra un mensaje
     if (loading) {
         return (
-            <Container id="quienes-somos" sx={{ py: 8 }}>
+            <Container id="quienes-somos" sx={{ py: 8, textAlign: 'center' }}>
+                <CircularProgress color="primary" />
                 <Typography align="center" variant="h6" color="text.secondary">Cargando Quiénes Somos...</Typography>
             </Container>
         );
     }
 
-    // Si terminó de cargar y no hay datos válidos (incluyendo errores), no renderiza nada
+    // Si terminó de cargar y no hay datos válidos, no renderiza nada
     if (!info) return null;
     
     return (
@@ -94,13 +90,12 @@ const QuienesSomos = () => {
                         src={info.imagenUrl}
                         alt="Imagen Quienes Somos"
                         sx={{
-                            // AQUÍ AJUSTAS ANCHO Y ALTO DE LA IMAGEN
-                            width: { xs: '100%', md: '400px' }, // Ancho 100% en móvil, 400px en escritorio
-                            height: 'auto',                      // Altura automática proporcional
-                            maxHeight: '350px',                  // Altura máxima para evitar imágenes muy altas
-                            objectFit: 'cover',                  // Corta sin distorsionar
-                            borderRadius: 2,                     // Esquinas redondeadas
-                            boxShadow: 3                         // Sombra sutil
+                            width: { xs: '100%', md: '400px' }, 
+                            height: 'auto',                      
+                            maxHeight: '350px',                  
+                            objectFit: 'cover',                  
+                            borderRadius: 2,                     
+                            boxShadow: 3                         
                         }}
                     />
                 )}

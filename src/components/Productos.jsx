@@ -8,12 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import ServiceCard from './ServiceCard';
 
 // CORRECCIÓN CLAVE: 
-// 1. ELIMINAMOS EL BLOQUE DUPLICADO DE CREDENCIALES (supabaseUrl, supabaseKey, createClient)
-// 2. IMPORTAMOS EL CLIENTE CENTRALIZADO DESDE src/services/supabaseClient.js
+// Eliminamos la importación comentada (createClient) y el bloque de credenciales duplicado.
+// Usamos el cliente centralizado importado de services/supabaseClient.js.
 import { supabase } from '../services/supabaseClient'; 
 
 // --- IMPORTACIONES DE IMÁGENES ---
-// Importamos las imágenes estáticas para que Vite/Netlify las procesen
 import imgMerino from '../assets/images/Lana-Merino-Premium.jpg';
 import imgAgujas from '../assets/images/Set-de-Agujas-de-Bambú.jpg';
 import imgAlgodon from '../assets/images/Hilo-de-Algodon-Organico.jpg';
