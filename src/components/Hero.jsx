@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Box, Typography, Button, Stack } from '@mui/material';
-
+import HeroImage from '../assets/images/El-arte-del-tejido-en-tus-manos.jpg';
 const Hero = () => (
     <Box
         id="inicio"
@@ -10,7 +10,7 @@ const Hero = () => (
             pt: { xs: 10, md: 15 },
             pb: { xs: 8, md: 12 },
             px: 3,
-            backgroundImage: `linear-gradient(to right, rgba(245, 245, 220, 0.9) 40%, rgba(245, 245, 220, 0.5) 70%, rgba(245, 245, 220, 0) 100%), url('src/assets/images/El-arte-del-tejido-en-tus-manos.jpg')`,
+           backgroundImage: `linear-gradient(to right, rgba(245, 245, 220, 0.9) 40%, rgba(245, 245, 220, 0.5) 70%, rgba(245, 245, 220, 0) 100%), url(${HeroImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             color: 'primary.main',

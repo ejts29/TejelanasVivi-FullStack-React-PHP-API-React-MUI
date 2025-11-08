@@ -2,15 +2,18 @@
 
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Container } from '@mui/material';
-// 1. Importa el cliente de Supabase
 import { createClient } from '@supabase/supabase-js'; 
 
-// *** 1. CREDENCIALES DE SUPABASE ***
-// REEMPLAZA ESTOS VALORES CON TU URL Y CLAVE PUBLIC ANÓNIMA REAL
+// IMPORTACIÓN CORREGIDA DE LA IMAGEN INSTITUCIONAL
+// Usamos require() o import para que Vite/Netlify la procesen
+import QuienesSomosImage from '../assets/images/Captura-de-pantalla-2025-05-29-171243.png';
+
+
+// *** 1. CREDENCIALES DE SUPABASE (Clave actualizada) ***
 const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ1MDA4NTMsImV4cCI6MjAyMDA3Njg1M30.4s-3pUv0OQ6U5F7pW1l9sR0Fq9JbXk5V2kK3bV-7tM0'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1NjI3NTAsImV4cCI6MjA3ODEzODc1MH0.6wuT3NtmeRBHxkZxCTwrrGzJPjWEw39WIg9qOhVtIHs'; 
 const supabase = createClient(supabaseUrl, supabaseKey);
-// **********************************
+// ******************************************************
 
 
 const QuienesSomos = () => {
@@ -20,21 +23,28 @@ const QuienesSomos = () => {
     useEffect(() => {
         async function getQuienesSomos() {
             try {
-                // *** 2. CONSULTA SUPABASE (Reemplazo del fetch) ***
+                // *** CONSULTA SUPABASE ***
                 const { data, error } = await supabase
-                    .from('quienessomos') // Nombre de la tabla
-                    .select('*')         // Selecciona todas las columnas
-                    .limit(1)           // Limita a 1 registro
-                    .single();          // Obtiene el objeto directamente (sin el array [])
+                    .from('quienessomos') 
+                    .select('*') 
+                    .limit(1) 
+                    .single(); 
 
                 if (error) {
                     throw error;
                 }
                 
-                setInfo(data);
+                // Agregamos la ruta estática de la imagen procesada por Vite
+                const processedInfo = {
+                    ...data,
+                    imagenUrl: QuienesSomosImage // Usamos la variable importada
+                };
+
+                setInfo(processedInfo);
+
             } catch (err) {
                 console.error('Error al cargar sección "Quiénes Somos" desde Supabase:', err.message);
-                setInfo(null); // Asegura que no se muestre información incompleta o vieja
+                setInfo(null);
             } finally {
                 setLoading(false);
             }
@@ -52,6 +62,7 @@ const QuienesSomos = () => {
     }
 
     // Si terminó de cargar y no hay datos válidos (incluyendo errores), no renderiza nada
+    // Si la API key es inválida, este componente NO se renderizará.
     if (!info) return null;
 
     return (
@@ -76,7 +87,7 @@ const QuienesSomos = () => {
                     <Typography color="text.secondary">{info.vision}</Typography>
                 </Box>
 
-                {/* Imagen: Aquí puedes ajustar tamaño */}
+                {/* Imagen: Ya está corregida para usar la ruta procesada por Vite */}
                 {info.imagenUrl && (
                     <Box
                         component="img"

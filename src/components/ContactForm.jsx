@@ -20,12 +20,11 @@ import ReCAPTCHA from 'react-google-recaptcha';
 // IMPORTE DE SUPABASE
 import { createClient } from '@supabase/supabase-js'; 
 
-// *** 1. CREDENCIALES DE SUPABASE ***
-// REEMPLAZA ESTOS VALORES CON TU URL Y CLAVE PUBLIC ANÓNIMA
+// *** 1. CREDENCIALES DE SUPABASE (Corregidas y codificadas) ***
 const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ1MDA4NTMsImV4cCI6MjAyMDA3Njg1M30.4s-3pUv0OQ6U5F7pW1l9sR0Fq9JbXk5V2kK3bV-7tM0'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1NjI3NTAsImV4cCI6MjA3ODEzODc1MH0.6wuT3NtmeRBHxkZxCTwrrGzJPjWEw39WIg9qOhVtIHs'; 
 const supabase = createClient(supabaseUrl, supabaseKey);
-// **********************************
+// *************************************************************
 
 const isValidEmail = (email) => {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
@@ -144,15 +143,13 @@ const ContactForm = ({ selectedProduct, selectedService }) => {
             };
 
             try {
-                // *** 2. REEMPLAZO DEL FETCH PHP POR EL INSERT DE SUPABASE ***
+                // *** 2. LÓGICA DE ENVÍO A SUPABASE ***
                 const { error } = await supabase
                     .from('contacto')
                     .insert([newContact]); 
-                // *********************************************************
+                // **********************************
 
                 if (error) {
-                    // Si RLS está activado y no hay políticas, dará un error aquí.
-                    // Si ocurre, se debe activar el RLS y agregar una política de 'insert'.
                     throw error;
                 }
 
@@ -163,7 +160,7 @@ const ContactForm = ({ selectedProduct, selectedService }) => {
                 });
 
                 // Reset form
-                setFormData(initialFormData); // Usa la versión inicial limpia
+                setFormData(initialFormData); 
                 
                 // Reset reCAPTCHA
                 setCaptchaToken(null);
@@ -172,8 +169,9 @@ const ContactForm = ({ selectedProduct, selectedService }) => {
             } catch (err) {
                 console.error("Error de Supabase:", err);
                 let errorMessage = 'Error al enviar el mensaje.';
-                if (err.code === '42501') {
-                    errorMessage = 'Error de permiso (RLS): La base de datos está protegida. Debes desactivar RLS en la tabla contacto o configurar una política de INSERT.';
+                // Si el error es de RLS (error de seguridad de base de datos)
+                if (err.code === '42501' || err.message.includes('RLS')) {
+                    errorMessage = 'Error de seguridad (RLS): Necesitas configurar una política de INSERT para la tabla "contacto" en Supabase.';
                 }
                 
                 setSnackbar({
@@ -400,5 +398,5 @@ const ContactForm = ({ selectedProduct, selectedService }) => {
         </Box>
     );
 };
-
+    
 export default ContactForm;

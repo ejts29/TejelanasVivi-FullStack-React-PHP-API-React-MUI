@@ -1,7 +1,7 @@
 // src/components/Productos.jsx
 
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, IconButton, Grid, Container } from '@mui/material';
+import { Box, Typography, IconButton, Grid, Container, CircularProgress } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
@@ -9,10 +9,26 @@ import ServiceCard from './ServiceCard';
 // Importa el cliente de Supabase
 import { createClient } from '@supabase/supabase-js'; 
 
-// *** 1. CREDENCIALES DE SUPABASE ***
-// REEMPLAZA ESTOS VALORES CON TU URL Y CLAVE PUBLIC ANÓNIMA
+// --- IMPORTACIONES DE IMÁGENES ---
+// Importamos las imágenes estáticas para que Vite/Netlify las procesen
+import imgMerino from '../assets/images/Lana-Merino-Premium.jpg';
+import imgAgujas from '../assets/images/Set-de-Agujas-de-Bambú.jpg';
+import imgAlgodon from '../assets/images/Hilo-de-Algodon-Organico.jpg';
+import imgKit from '../assets/images/Kit-de-Accesorios.jpg';
+import imgAlpaca from '../assets/images/Lana-de-Alpaca.jpg';
+
+// Mapeo para conectar el nombre del producto de la BD con la variable importada
+const productImages = {
+    'Lana Merino Premium': imgMerino,
+    'Set de Agujas de Bambú': imgAgujas,
+    'Hilo de Algodón Orgánico': imgAlgodon,
+    'Kit de Accesorios': imgKit,
+    'Lana de Alpaca': imgAlpaca,
+};
+
+// *** 1. CREDENCIALES DE SUPABASE (Corregidas y completas) ***
 const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ1MDA4NTMsImV4cCI6MjAyMDA3Njg1M30.4s-3pUv0OQ6U5F7pW1l9sR0Fq9JbXk5V2kK3bV-7tM0'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1NjI3NTAsImV4cCI6MjA3ODEzODc1MH0.6wuT3NtmeRBHxkZxCTwrrGzJPjWEw39WIg9qOhVtIHs'; 
 const supabase = createClient(supabaseUrl, supabaseKey);
 // **********************************
 
@@ -33,19 +49,26 @@ const Productos = () => {
     useEffect(() => {
         async function getProductos() {
             try {
-                // *** 2. CONSULTA SUPABASE ***
+                // CONSULTA SUPABASE
                 const { data, error } = await supabase
-                    .from('productos') // Nombre de la tabla
+                    .from('productos')
                     .select('*'); 
 
                 if (error) {
                     throw error;
                 }
 
-                setProductos(data);
+                // Mapeamos los datos para asignar la imagen procesada por Vite
+                const mappedData = data.map(product => ({
+                    ...product,
+                    // Usamos la variable importada para la ruta de la imagen
+                    image: productImages[product.nombre] || product.imagenUrl
+                }));
+
+
+                setProductos(mappedData);
             } catch (error) {
                 console.error('Error al obtener productos:', error.message);
-                // Si falla, dejamos el array vacío
                 setProductos([]);
             } finally {
                 setLoading(false);
@@ -80,8 +103,9 @@ const Productos = () => {
     // Renderiza el carrusel de productos
     if (loading) {
         return (
-            <Container sx={{ py: 5 }}>
-                <Typography variant="h6" align="center">Cargando productos...</Typography>
+            <Container sx={{ py: 5, textAlign: 'center' }}>
+                <CircularProgress color="primary" />
+                <Typography variant="h6" align="center" mt={2}>Cargando productos...</Typography>
             </Container>
         );
     }
@@ -119,7 +143,8 @@ const Productos = () => {
                             <ServiceCard
                                 title={producto.nombre}
                                 description={producto.descripcion}
-                                image={producto.imagenUrl}
+                                // Aquí usamos la imagen mapeada (variable importada)
+                                image={producto.image}
                                 onContactClick={handleContactClick}
                             />
                         </Grid>
