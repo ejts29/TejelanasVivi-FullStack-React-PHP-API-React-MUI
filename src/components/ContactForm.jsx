@@ -17,6 +17,15 @@ import {
     Alert
 } from '@mui/material';
 import ReCAPTCHA from 'react-google-recaptcha';
+// IMPORTE DE SUPABASE
+import { createClient } from '@supabase/supabase-js'; 
+
+// *** 1. CREDENCIALES DE SUPABASE ***
+// REEMPLAZA ESTOS VALORES CON TU URL Y CLAVE PUBLIC ANÓNIMA
+const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ1MDA4NTMsImV4cCI6MjAyMDA3Njg1M30.4s-3pUv0OQ6U5F7pW1l9sR0Fq9JbXk5V2kK3bV-7tM0'; 
+const supabase = createClient(supabaseUrl, supabaseKey);
+// **********************************
 
 const isValidEmail = (email) => {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
@@ -26,18 +35,20 @@ const isValidPhone = (phone) => {
     return /^\d{7,15}$/.test(phone);
 };
 
+const initialFormData = {
+    nombre: '',
+    email: '',
+    telefono: '',
+    asunto: '',
+    categoria: '',
+    mensaje: '',
+    metodoEnvio: '',
+    metodoPago: '',
+    privacy: false,
+};
+
 const ContactForm = ({ selectedProduct, selectedService }) => {
-    const [formData, setFormData] = useState({
-        nombre: '',
-        email: '',
-        telefono: '',
-        asunto: '',
-        categoria: '',
-        mensaje: '',
-        metodoEnvio: '',
-        metodoPago: '',
-        privacy: false,
-    });
+    const [formData, setFormData] = useState(initialFormData);
 
     const [errors, setErrors] = useState({});
     const [snackbar, setSnackbar] = useState({
@@ -118,49 +129,56 @@ const ContactForm = ({ selectedProduct, selectedService }) => {
         setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {
+            
+            // Creación del objeto de contacto para Supabase
+            const newContact = {
+                nombre: formData.nombre,
+                email: formData.email,
+                telefono: formData.telefono || null, // Permite nulo si está vacío
+                asunto: formData.asunto,
+                categoria: formData.categoria,
+                mensaje: formData.mensaje,
+                metodo_envio: formData.metodoEnvio,
+                metodo_pago: formData.metodoPago,
+                // El campo 'fecha' lo maneja automáticamente Supabase
+            };
+
             try {
-                const response = await fetch('http://tejelanasvivi-ejts.infinityfree.me/backend/api/productos/contacto.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ...formData, captchaToken })
-                });
+                // *** 2. REEMPLAZO DEL FETCH PHP POR EL INSERT DE SUPABASE ***
+                const { error } = await supabase
+                    .from('contacto')
+                    .insert([newContact]); 
+                // *********************************************************
 
-                const result = await response.json();
-                if (response.ok) {
-                    setSnackbar({
-                        open: true,
-                        message: '¡Gracias por contactarnos! Te responderemos pronto.',
-                        severity: 'success'
-                    });
-
-                    // Reset form
-                    setFormData({
-                        nombre: '',
-                        email: '',
-                        telefono: '',
-                        asunto: '',
-                        categoria: '',
-                        mensaje: '',
-                        metodoEnvio: '',
-                        metodoPago: '',
-                        privacy: false
-                    });
-
-                    // Reset reCAPTCHA
-                    setCaptchaToken(null);
-                    if (recaptchaRef.current) recaptchaRef.current.reset();
-
-                } else {
-                    setSnackbar({
-                        open: true,
-                        message: result.error || 'Error al enviar el mensaje',
-                        severity: 'error'
-                    });
+                if (error) {
+                    // Si RLS está activado y no hay políticas, dará un error aquí.
+                    // Si ocurre, se debe activar el RLS y agregar una política de 'insert'.
+                    throw error;
                 }
-            } catch (err) {
+
                 setSnackbar({
                     open: true,
-                    message: 'Error de conexión con el servidor',
+                    message: '¡Gracias por contactarnos! Te responderemos pronto.',
+                    severity: 'success'
+                });
+
+                // Reset form
+                setFormData(initialFormData); // Usa la versión inicial limpia
+                
+                // Reset reCAPTCHA
+                setCaptchaToken(null);
+                if (recaptchaRef.current) recaptchaRef.current.reset();
+
+            } catch (err) {
+                console.error("Error de Supabase:", err);
+                let errorMessage = 'Error al enviar el mensaje.';
+                if (err.code === '42501') {
+                    errorMessage = 'Error de permiso (RLS): La base de datos está protegida. Debes desactivar RLS en la tabla contacto o configurar una política de INSERT.';
+                }
+                
+                setSnackbar({
+                    open: true,
+                    message: errorMessage,
                     severity: 'error'
                 });
             }

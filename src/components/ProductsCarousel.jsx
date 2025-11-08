@@ -1,32 +1,73 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, IconButton, Grid } from '@mui/material';
+import { Box, Typography, IconButton, Grid, Container } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ProductCard from './ProductCard';
+// Importa el cliente de Supabase
+import { createClient } from '@supabase/supabase-js'; 
 
-// --- IMPORTACIONES CORREGIDAS ---
-// Importamos las imágenes para que Vite las procese
-import imgMerino from '../assets/images/Lana-Merino-Premium.jpg';
-import imgAgujas from '../assets/images/Set-de-Agujas-de-Bambú.jpg';
-import imgAlgodon from '../assets/images/Hilo-de-Algodon-Organico.jpg';
-import imgKit from '../assets/images/Kit-de-Accesorios.jpg';
-import imgAlpaca from '../assets/images/Lana-de-Alpaca.jpg';
+// *** 1. CREDENCIALES DE SUPABASE ***
+// REEMPLAZA ESTOS VALORES CON TU URL Y CLAVE PUBLIC ANÓNIMA REAL
+const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ1MDA4NTMsImV4cCI6MjAyMDA3Njg1M30.4s-3pUv0OQ6U5F7pW1l9sR0Fq9JbXk5V2kK3bV-7tM0'; 
+const supabase = createClient(supabaseUrl, supabaseKey);
+// **********************************
 
-// --- ARRAY CORREGIDO ---
-// Usamos las variables de importación, no strings de texto
-const productsData = [
-  { title: 'Lana Merino Premium', description: '100% lana merino...', price: '$12.500', image: imgMerino },
-  { title: 'Set de Agujas de Bambú', description: 'Juego completo...', price: '$18.900', image: imgAgujas },
-  { title: 'Hilo de Algodón Orgánico', description: 'Algodón 100%...', price: '$8.900', image: imgAlgodon },
-  { title: 'Kit de Accesorios', description: 'Todo lo que necesitas...', price: '$15.500', image: imgKit },
-  { title: 'Lana de Alpaca', description: 'Lana de alpaca...', price: '$14.900', image: imgAlpaca },
-];
-// --- FIN DE LA CORRECCIÓN ---
+// --- IMPORTACIONES DE IMÁGENES (Mantener la lógica para que Vite las procese) ---
+// *Nota: Para usar estas importaciones en el carrusel de productos destacados, 
+// debemos cargar los productos estáticamente o mapear el nombre de la imagen.*
+
+// Definimos el array de productos vacío para que se llene con Supabase.
+// Usaremos la URL de las imágenes estáticas importadas.
+const productImages = {
+    'Lana Merino Premium': require('../assets/images/Lana-Merino-Premium.jpg'),
+    'Set de Agujas de Bambú': require('../assets/images/Set-de-Agujas-de-Bambú.jpg'),
+    'Hilo de Algodón Orgánico': require('../assets/images/Hilo-de-Algodon-Organico.jpg'),
+    'Kit de Accesorios': require('../assets/images/Kit-de-Accesorios.jpg'),
+    'Lana de Alpaca': require('../assets/images/Lana-de-Alpaca.jpg'),
+};
 
 const ProductsCarousel = ({ onContactProduct }) => {
+  // Cambiamos productsData estático por estado dinámico
+  const [productsData, setProductsData] = useState([]); 
+  const [loading, setLoading] = useState(true);
+  
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(1);
 
+  // EFECTO 1: Obtener productos desde Supabase
+  useEffect(() => {
+    async function getProductosDestacados() {
+        try {
+            // Consulta la tabla 'productos' (Limitamos a 5 o la cantidad que quieras destacar)
+            const { data, error } = await supabase
+                .from('productos')
+                .select('*')
+                .limit(5); // Limita el carrusel
+
+            if (error) {
+                throw error;
+            }
+
+            // Mapea la URL estática de la imagen para que React la pueda usar
+            const mappedData = data.map(product => ({
+                ...product,
+                // Asignamos la imagen importada por su nombre (si existe)
+                image: productImages[product.nombre] || product.imagenUrl 
+            }));
+
+            setProductsData(mappedData);
+        } catch (error) {
+            console.error('Error al obtener productos destacados:', error.message);
+            setProductsData([]);
+        } finally {
+            setLoading(false);
+        }
+    }
+    getProductosDestacados();
+  }, []);
+
+  // EFECTO 2: Ajustar la vista del carrusel (el código que ya tenías)
   useEffect(() => {
     const updateItemsPerView = () => {
       const width = window.innerWidth;
@@ -38,6 +79,17 @@ const ProductsCarousel = ({ onContactProduct }) => {
     window.addEventListener('resize', updateItemsPerView);
     return () => window.removeEventListener('resize', updateItemsPerView);
   }, []);
+
+  if (loading) {
+    return (
+        <Container sx={{ py: 5 }}>
+            <Typography variant="h6" align="center">Cargando destacados...</Typography>
+        </Container>
+    );
+  }
+
+  // Si no hay datos, no renderiza el carrusel
+  if (productsData.length === 0) return null; 
 
   const totalSlides = Math.ceil(productsData.length / itemsPerView);
   const goToSlide = (index) => {
@@ -73,7 +125,13 @@ const ProductsCarousel = ({ onContactProduct }) => {
         <Grid container spacing={2} justifyContent="center" role="list" aria-live="polite">
           {visibleItems.map((product, i) => (
             <Grid item xs={12} sm={6} md={4} key={product.title} role="listitem">
-              <ProductCard {...product} onContactProduct={onContactProduct} />
+              <ProductCard 
+                title={product.nombre || product.title} 
+                description={product.descripcion || product.description}
+                price={`$${(product.precio || product.price).toLocaleString('es-CL')}`}
+                image={product.image}
+                onContactProduct={onContactProduct} 
+              />
             </Grid>
           ))}
         </Grid>

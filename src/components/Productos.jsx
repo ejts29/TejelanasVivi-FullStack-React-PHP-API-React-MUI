@@ -1,4 +1,4 @@
-//src\components\Productos.jsx
+// src/components/Productos.jsx
 
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, IconButton, Grid, Container } from '@mui/material';
@@ -6,6 +6,15 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
 import ServiceCard from './ServiceCard';
+// Importa el cliente de Supabase
+import { createClient } from '@supabase/supabase-js'; 
+
+// *** 1. CREDENCIALES DE SUPABASE ***
+// REEMPLAZA ESTOS VALORES CON TU URL Y CLAVE PUBLIC ANÓNIMA
+const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ1MDA4NTMsImV4cCI6MjAyMDA3Njg1M30.4s-3pUv0OQ6U5F7pW1l9sR0Fq9JbXk5V2kK3bV-7tM0'; 
+const supabase = createClient(supabaseUrl, supabaseKey);
+// **********************************
 
 const Productos = () => {
     const [productos, setProductos] = useState([]);
@@ -13,27 +22,38 @@ const Productos = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [itemsPerView, setItemsPerView] = useState(1);
     const navigate = useNavigate();
-    //    // Maneja el clic en el botón de contacto de cada producto
+    
+    // Maneja el clic en el botón de contacto de cada producto
     const handleContactClick = (productName) => {
         localStorage.setItem("productoSeleccionado", productName);
         navigate("/contacto");
     };
+    
     // Efecto para obtener productos desde la API
     useEffect(() => {
-        fetch('http://tejelanasvivi-ejts.infinityfree.me/backend/api/productos/productos.php')
-            .then((response) => {
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                return response.json();
-            })
-            .then((data) => {
+        async function getProductos() {
+            try {
+                // *** 2. CONSULTA SUPABASE ***
+                const { data, error } = await supabase
+                    .from('productos') // Nombre de la tabla
+                    .select('*'); 
+
+                if (error) {
+                    throw error;
+                }
+
                 setProductos(data);
+            } catch (error) {
+                console.error('Error al obtener productos:', error.message);
+                // Si falla, dejamos el array vacío
+                setProductos([]);
+            } finally {
                 setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error al obtener productos:', error);
-                setLoading(false);
-            });
+            }
+        }
+        getProductos();
     }, []);
+    
     // Efecto para ajustar el número de elementos por vista según el tamaño de la ventana
     useEffect(() => {
         const updateItemsPerView = () => {
@@ -56,6 +76,7 @@ const Productos = () => {
         else if (index >= totalSlides) index = 0;
         setCurrentIndex(index);
     };
+    
     // Renderiza el carrusel de productos
     if (loading) {
         return (
@@ -72,6 +93,7 @@ const Productos = () => {
             </Container>
         );
     }
+    
     // Renderiza el carrusel de productos
     return (
         <Container sx={{ py: 8 }} id="productos" role="region" aria-label="Carrusel de productos">
