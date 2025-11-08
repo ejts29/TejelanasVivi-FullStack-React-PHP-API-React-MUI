@@ -4,13 +4,11 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ProductCard from './ProductCard';
 // Importa el cliente de Supabase
-import { createClient } from '@supabase/supabase-js'; 
+import { supabase } from '../services/supabaseClient';
+
 
 // *** 1. CREDENCIALES DE SUPABASE ***
-// REEMPLAZA ESTOS VALORES CON TU URL Y CLAVE PUBLIC ANÓNIMA REAL
-const supabaseUrl = 'https://evgykiyuirkjxppqvfjt.supabase.co'; 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z3lraXl1aXJranhwcXF2Zmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ1MDA4NTMsImV4cCI6MjAyMDA3Njg1M30.4s-3pUv0OQ6U5F7pW1l9sR0Fq9JbXk5V2kK3bV-7tM0'; 
-const supabase = createClient(supabaseUrl, supabaseKey);
+
 // **********************************
 
 // --- IMPORTACIONES DE IMÁGENES CORREGIDAS (Sintaxis compatible con Vite/Netlify) ---

@@ -1,22 +1,38 @@
-//tejelanas_vivi\src\components\ArtGallery.jsx
+// tejelanas_vivi\src\components\ArtGallery.jsx
+
 import React, { useState, useEffect } from 'react';
-import { Box, IconButton, Grid, CardMedia, Typography } from '@mui/material';
+import { Box, IconButton, Grid, CardMedia, Typography, Container } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+// CORRECCIÓN CLAVE: Importamos cada imagen como una variable
+import Img1 from '../assets/images/Captura-de-pantalla-2025-05-27233309.png';
+import Img2 from '../assets/images/IMG-20250528-WA0014.jpg';
+import Img3 from '../assets/images/Captura-de-pantalla-2025-05-27233002.png';
+import Img4 from '../assets/images/Captura-de-pantalla-2025-05-27233158.png';
+import Img5 from '../assets/images/Captura-de-pantalla-2025-05-27233403.png';
+import Img6 from '../assets/images/IMG-20250528-WA0004.jpg';
+import Img7 from '../assets/images/IMG-20250528-WA0005.jpg';
+import Img8 from '../assets/images/IMG-20250528-WA0006.jpg';
+import Img9 from '../assets/images/IMG-20250528-WA0008.jpg';
+import Img10 from '../assets/images/IMG-20250528-WA0009.jpg';
+import Img11 from '../assets/images/IMG-20250528-WA0010.jpg';
+import Img12 from '../assets/images/IMG-20250528-WA0011.jpg';
+
+
 const images = [
-    'src/assets/images/Captura-de-pantalla-2025-05-27233309.png',
-    'src/assets/images/IMG-20250528-WA0014.jpg',
-    'src/assets/images/Captura-de-pantalla-2025-05-27233002.png',
-    'src/assets/images/Captura-de-pantalla-2025-05-27233158.png',
-    'src/assets/images/Captura-de-pantalla-2025-05-27233403.png',
-    'src/assets/images/IMG-20250528-WA0004.jpg',
-    'src/assets/images/IMG-20250528-WA0005.jpg',
-    'src/assets/images/IMG-20250528-WA0006.jpg',
-    'src/assets/images/IMG-20250528-WA0008.jpg',
-    'src/assets/images/IMG-20250528-WA0009.jpg',
-    'src/assets/images/IMG-20250528-WA0010.jpg',
-    'src/assets/images/IMG-20250528-WA0011.jpg',
+    Img1,
+    Img2,
+    Img3,
+    Img4,
+    Img5,
+    Img6,
+    Img7,
+    Img8,
+    Img9,
+    Img10,
+    Img11,
+    Img12,
 ];
 
 const ArtGalleryCarousel = () => {
@@ -57,7 +73,7 @@ const ArtGalleryCarousel = () => {
         >
 
             <Typography variant="h4" align="center" gutterBottom color="primary" fontWeight="bold" mb={4}>
-                Nuestra Galeria de Arte  Tejidos vivi
+                Nuestra Galeria de Arte Tejedos vivi
             </Typography>
             <Typography variant="subtitle1" align="center" color="text.secondary" maxWidth={700} mx="auto" mb={6}>
                 Explora nuestra colección de imágenes que capturan la esencia del tejido y la creatividad. Cada pieza es una obra de arte tejida a mano.
@@ -77,7 +93,8 @@ const ArtGalleryCarousel = () => {
                         <Grid item xs={12} sm={6} md={4} key={startIndex + idx}>
                             <CardMedia
                                 component="img"
-                                image={src}
+                                // Aquí usamos la variable 'src' (la imagen importada)
+                                image={src} 
                                 alt={`Imagen ${startIndex + idx + 1}`}
                                 sx={{ borderRadius: 2, width: '100%', height: 290, objectFit: 'cover' }}
                             />

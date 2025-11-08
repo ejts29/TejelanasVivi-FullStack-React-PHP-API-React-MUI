@@ -21,7 +21,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 // CORRECCIÓN CLAVE: 
 // Eliminamos la importación duplicada 'createClient' y el bloque de credenciales.
 // IMPORTAMOS EL CLIENTE CENTRALIZADO 'supabase' desde el archivo services/supabaseClient.js.
-import { supabase } from '../services/supabaseClient'; 
+import { supabase } from '../services/supabaseClient';
 
 // **********************************
 // NOTA: EL BLOQUE DE CREDENCIALES DUPLICADO HA SIDO ELIMINADO
