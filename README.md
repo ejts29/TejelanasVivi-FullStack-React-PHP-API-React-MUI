@@ -1,7 +1,7 @@
 
 -----
 
-# Tejelanas Vivi - Informe de Evaluación Final (Serverless Architecture)
+# 🧶🪡🧣 Tejelanas Vivi - Informe de Evaluación Final (Serverless Architecture)
 
 Este documento es un informe consolidado que presenta el cumplimiento de los objetivos académicos de las asignaturas **Desarrollo Frontend / Backend (EVA3)** y documenta la arquitectura final de despliegue en la nube, la cual fue migrada para asegurar una operación **gratuita, estable y segura (HTTPS)**.
 
