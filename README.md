@@ -105,8 +105,3 @@ Para trabajar en el código y ver la aplicación conectada a la misma API de la 
 ├── package.json              # Incluye @supabase/supabase-js
 └── README.md                 # Este documento
 ```
-
------
-
-```eof
-```
